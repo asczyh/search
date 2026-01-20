@@ -77,22 +77,27 @@ class DataManager:
         self.sheet1 = pd.read_excel(
             FILE_PATH,
             sheet_name=SHEET1_NAME,
+            usecols='A,D',
             dtype={'NameDesc': 'string', 'Id': 'string'}  # 确保ID为字符串
         )
+        #print(self.sheet1)
         self.sheet2 = pd.read_excel(
             FILE_PATH,
             sheet_name=SHEET2_NAME,
+            usecols='A,B,AW,BK',
             dtype={'Id': 'string', 'NameDesc': 'string',
                    'EffectParam1': 'string', 'AdditionPerAdd1': 'string'},
             na_values=["", "NA", "N/A", "ARRAY(INT32)"],
             keep_default_na=False,
             skiprows=range(1, 4)
         )
+        #print(self.sheet2)
         # 构建技能名称到ID的映射
         self.id_name_map = dict(zip(
             self.sheet1['NameDesc'].astype(str),
             self.sheet1['Id'].astype(str)  # 确保ID为字符串
         ))
+        print(self.id_name_map)
 
     def get_skill_options(self):
         """获取所有技能名称列表"""
@@ -102,11 +107,9 @@ class DataManager:
         """根据技能名称查询数据"""
         if not skill_name or skill_name == "输入技能名...":
             return pd.DataFrame(columns=self.columns)  # 返回空DataFrame
-
         # 查找匹配的技能ID (确保为字符串)
         matched_ids = [str(id_val) for name, id_val in self.id_name_map.items()
                        if skill_name in name]
-
         if not matched_ids:
             return pd.DataFrame(columns=self.columns)
 
