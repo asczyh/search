@@ -37,7 +37,7 @@ class AutocompleteEntry:
         # 设置默认提示文本
         self.entry.insert(0, "输入技能名...")
         self.entry.bind("<Button-1>", self.on_entry_click)
-
+        self.entry.bind("<KeyRelease>", self.on_key_release)
     def on_entry_click(self, event):
         """点击输入框时清空默认文本"""
         if self.entry.get() == "输入技能名...":
@@ -97,7 +97,6 @@ class DataManager:
             self.sheet1['NameDesc'].astype(str),
             self.sheet1['Id'].astype(str)  # 确保ID为字符串
         ))
-        print(self.id_name_map)
 
     def get_skill_options(self):
         """获取所有技能名称列表"""
@@ -117,7 +116,10 @@ class DataManager:
         escaped_ids = [re.escape(id_str) for id_str in matched_ids]
         pattern = '|'.join(escaped_ids)  # 创建正则模式
 
+
         # 执行模糊匹配
+
+        print(self.sheet2['Id'])
         mask = self.sheet2['Id'].astype(str).str.contains(
             pattern, case=False, na=False
         )
