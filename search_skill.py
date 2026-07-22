@@ -40,8 +40,7 @@ class AutocompleteEntry:
         self.entry.bind("<KeyRelease>", self.on_key_release)
     def on_entry_click(self, event):
         """点击输入框时清空默认文本"""
-        if self.entry.get() == "输入技能名...":
-            self.entry.delete(0, tk.END)
+        self.entry.delete(0, tk.END)
 
     def on_key_release(self, event):
         """键盘输入时动态匹配选项"""
@@ -73,14 +72,14 @@ class AutocompleteEntry:
 class DataManager:
     def __init__(self, columns):
         self.columns = columns
-        # 读取Excel数据
         self.sheet1 = pd.read_excel(
             FILE_PATH,
             sheet_name=SHEET1_NAME,
-            usecols='A,D',
-            dtype={'NameDesc': 'string', 'Id': 'string'}  # 确保ID为字符串
+            usecols='D,BH',
+            dtype={'NameDesc': 'string', 'Buff1': 'string'}
         )
-        #print(self.sheet1)
+        self.sheet1 = self.sheet1.rename(columns={'Buff1': 'Id'})
+        self.sheet1['Id'] = self.sheet1['Id'].str[:6].fillna('')
         self.sheet2 = pd.read_excel(
             FILE_PATH,
             sheet_name=SHEET2_NAME,
@@ -119,7 +118,6 @@ class DataManager:
 
         # 执行模糊匹配
 
-        print(self.sheet2['Id'])
         mask = self.sheet2['Id'].astype(str).str.contains(
             pattern, case=False, na=False
         )
