@@ -9,7 +9,7 @@ def get_exe_dir():
     """获取EXE所在目录（开发环境返回脚本目录）"""
     if getattr(sys, 'frozen', False):  # 打包环境
         return os.path.dirname(sys.executable)  # EXE所在目录
-    return os.path.dirname(os.path.abspath(__file__))  #  开发环境脚本目录
+    return os.path.dirname(os.path.abspath(__file__))  #   开发环境脚本目录
 
 # 获取Excel路径（与EXE同级）
 FILE_PATH = os.path.join(get_exe_dir(), "Z战法.xlsx")
